@@ -5,8 +5,9 @@
 ```
 1. api: https://login.weixin.qq.com/jslogin
 2. method: post
-3. params: appid: 应用ID
-           fun: new 应用类型
-           lang: zh_CN 语言
-           _: 时间戳
+3. params: appid: //应用ID, 值为wxeb7ec651dd0aefa9,表示"微信网页版"
+           fun: new //应用类型, 固定为new
+           lang: zh_CN //语言, 表示中文
+           _:  //时间戳
+4. 返回值: window.QRLogin.code = 200; window.QRLogin.uuid = "xxx"
 ```
