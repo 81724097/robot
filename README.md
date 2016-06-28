@@ -10,4 +10,5 @@
            lang: zh_CN //语言, 表示中文
            _:  //时间戳
 4. 返回值: window.QRLogin.code = 200; window.QRLogin.uuid = "xxx"
+5. uuid，是生成二维码登陆的必要参数
 ```
