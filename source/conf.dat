@@ -1,0 +1,7 @@
+[login]
+url = https://login.weixin.qq.com/jslogin
+params_appid = wx782c26e4c19acffb
+params_fun = new
+params_lang = zh_CN
+qrcode_url = https://login.weixin.qq.com/qrcode/
+qrcode_png = ./tmp/qrcode.png
