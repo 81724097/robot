@@ -3,7 +3,7 @@
 
 ## web微信Api
 ```
-1. api: https://login.weixin.qq.com/jslogin
+1. api: https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb&fun=new&lang=zh_CN&_=1467219164569
 2. method: post
 3. params: appid: //应用ID, 值为wx782c26e4c19acffb,表示"微信网页版"
            fun: new //应用类型, 固定为new
