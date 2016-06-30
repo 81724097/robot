@@ -15,7 +15,10 @@
 ```
 ## 依赖
 ```
-1. linux: qrencode
+1. linux:
+   a. ubuntu: sudo apt-get install imagemagick
+   b. redhate: yum install -y gcc php-devel php-pear
+               yum install -y ImageMagick ImageMagick-devel
 2. python:
    a. version > 2.6
    b. pip install requests
