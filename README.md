@@ -13,3 +13,13 @@
 5. uuid，是生成二维码登陆的必要参数
 6. 生成二维码链接: https://login.weixin.qq.com/qrcode/xxxx, xxxx表示uuid
 ```
+## 依赖
+```
+1. linux: qrencode
+2. python:
+   a. version > 2.6
+   b. pip install requests
+   c. pip install pyqrcode
+   d. pip install pypng
+   e. pip install Pillow
+```
