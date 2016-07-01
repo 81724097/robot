@@ -14,7 +14,7 @@
    5). pip install pyopenssl ndg-httpsclient pyasn1
 ```
 
-## web微信Api
+## web微信登录过程
 ```
 1. 获取uuid
    1). 说明: 微信Web版本不使用用户名和密码登录，而是采用二维码登录，所以服务器需要首先分配一个唯一的会话ID，用来标识当前的一次登录
@@ -26,12 +26,14 @@
         c. fun 固定值 new
         d. lang 固定值 表示中文
         e. _ 表示13位时间戳
+
 2. 获取登录二维码
    1). 说明: get请求拿到数据，再保存为图片并展示
    2). api: https://login.weixin.qq.com/qrcode/xxxx
    3). get 请求
    4). 参数说明:
        a. xxxx表示uuid
+
 3. 扫描二维码等待用户确认
    1). 说明: 当用户拿到二维码数据之后，用户需要扫描二维码并点击确认登录
    2). api: https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?uuid=454d958c7f6243&tip=1&_=1388975883859
@@ -42,6 +44,17 @@
           1->表示的是未扫描，等待用户扫描。返回window.code=201表示扫描成功，返回window.code=408表示扫描超时
           0->表示等待用户确认登录。返回window.code=200;window.redirect_uri="https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=IZu2xb_hIQ==&lang=zh_CN&scan=1467393709"; 表示登录成功
        c. _表示当前时间戳，13位
+   5). 点击登录成功之后，返回redirect_uri表示用户已经在手机端完成了授权过程，需要继续访问当前链接获取wxuin和wxsid
+
+4. 访问登录地址，获得uin和sid
+   1). 说明: wxuin和wxsid在后续的通信中都需要用到
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=IZu2xb_hIQ==&lang=zh_CN&scan=1467393709
+   3). get 请求
+   4). 返回结果
+       <error><ret>0</ret><message>OK</message><skey>@crypt_b13bcf4_b49e9a98c34a5e263381f032e6ae18cb</skey><wxsid>gJmKzszzW2KnFIXf</wxsid><wxuin>828185640</wxuin><pass_ticket>vBTQ11xy5sLBraR8BT1K7xGQldAmLRSZBzylJ%2FiEVbV77SgMcNyOBj0seNho8kUM</pass_ticket><isgrayscale>1</isgrayscale></error>
+
+5. 初始化登录信息
+   1). 说明: 
 ```
 
 ## 参考
