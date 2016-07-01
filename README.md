@@ -21,4 +21,5 @@
    c. pip install pyqrcode
    d. pip install pypng
    e. pip install Pillow
+   f. pip install pyopenssl ndg-httpsclient pyasn1
 ```
