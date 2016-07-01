@@ -11,15 +11,11 @@
            _:  //时间戳
 4. 返回值: window.QRLogin.code = 200; window.QRLogin.uuid = "xxx"
 5. uuid，是生成二维码登陆的必要参数
-6. 生成二维码链接: https://login.weixin.qq.com/qrcode/xxxx, xxxx表示uuid
+6. 生成二维码链接: https://login.weixin.qq.com/l/xxxx, xxxx表示uuid
 ```
 ## 依赖
 ```
-1. linux:
-   a. ubuntu: sudo apt-get install imagemagick
-   b. redhate: yum install -y gcc php-devel php-pear
-               yum install -y ImageMagick ImageMagick-devel
-2. python:
+1. python:
    a. version > 2.6
    b. pip install requests
    c. pip install pyqrcode
