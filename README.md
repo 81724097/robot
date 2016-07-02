@@ -94,8 +94,8 @@
        }
    5). 返回json串，BaseResponse内Ret位0表示成功
    
-7. 同步刷新
-   1). 说明: 为了保证客户端和服务端通信正常，需要客户端不断发送请求给服务端
+7. 同步刷新，检查服务端消息
+   1). 说明: 为了实时取到消息，需要客户端不断发送请求给服务端查询
    2). api: https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&sid=%s&uin=%s&deviceid=%s&synckey=%s&_=%s
    3). get 请求
    4). 参数说明
@@ -114,7 +114,12 @@
        selector:
        a. 0 正常
        b. 2 新的消息
-       c. 7 进入/离开聊天界面
+       c. 7 手机操作了微信
+       
+8. 获取消息
+   1). 说明: 
+
+9. 发送消息
    
 ```
 
