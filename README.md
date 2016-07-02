@@ -18,7 +18,7 @@
 ```
 1. 获取uuid
    1). 说明: 微信Web版本不使用用户名和密码登录，而是采用二维码登录，所以服务器需要首先分配一个唯一的会话ID，用来标识当前的一次登录
-   2). api: https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=1467390116155
+   2). api: https://login.wx.qq.com/jslogin?appid=wx782c26e4c19acffb&redirect_uri=https%3A%2F%2Fwx.qq.com%2Fcgi-bin%2Fmmwebwx-bin%2Fwebwxnewloginpage&fun=new&lang=zh_CN&_=%s
    3). get 请求
    3). 参数说明:
         a. appid 固定值wx782c26e4c19acffb表示微信网页版
@@ -29,14 +29,14 @@
 
 2. 获取登录二维码
    1). 说明: get请求拿到数据，再保存为图片并展示
-   2). api: https://login.weixin.qq.com/qrcode/xxxx
+   2). api: https://login.weixin.qq.com/qrcode/%s
    3). get 请求
    4). 参数说明:
-       a. xxxx表示uuid
+       a. 唯一参数是uuid
 
 3. 扫描二维码等待用户确认
    1). 说明: 当用户拿到二维码数据之后，用户需要扫描二维码并点击确认登录
-   2). api: https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?uuid=454d958c7f6243&tip=1&_=1388975883859
+   2). api: https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?uuid=%s&tip=1&_=%s
    3). get 请求
    4). 参数说明
        a. uuid 表示当前uuid
@@ -48,13 +48,52 @@
 
 4. 访问登录地址，获得uin和sid
    1). 说明: wxuin和wxsid在后续的通信中都需要用到
-   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=IZu2xb_hIQ==&lang=zh_CN&scan=1467393709
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=%s==&lang=zh_CN&scan=%s
    3). get 请求
-   4). 返回结果
+   4). 参数说明
+       a. uuid 表示当前uuid
+       b. scan 表示当前的扫描时间戳 10位
+   5). 返回结果
        <error><ret>0</ret><message>OK</message><skey>@crypt_b13bcf4_b49e9a98c34a5e263381f032e6ae18cb</skey><wxsid>gJmKzszzW2KnFIXf</wxsid><wxuin>828185640</wxuin><pass_ticket>vBTQ11xy5sLBraR8BT1K7xGQldAmLRSZBzylJ%2FiEVbV77SgMcNyOBj0seNho8kUM</pass_ticket><isgrayscale>1</isgrayscale></error>
+       a. skey
+       b. wxsid
+       c. wxuin --> 用户唯一的id
+       d. pass_ticket
 
-5. 初始化登录信息
-   1). 说明: 
+5. 初始化登录页信息
+   1). 说明: 初始化登录后页面的信息，获取常用联系人以及微信公众号
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=%s&lang=zh_CN&pass_ticket=%s
+   3). post 请求
+   4). post data
+       {
+          'BaseResponse': {
+              'Uin': wxuin,
+              'Sid': wxsid,
+              'Skey': skey,
+              'DeviceID': //随机串 'e'+str(random.random())[2:17]
+          }
+       }
+   5). 返回json串包含当前user的相关信息，BaseResponse内Ret位0表示成功
+   
+6. 开启微信状态通知
+   1). 说明: 有新消息通知的时候会显示
+   2). api:  https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify?lang=zh_CN&pass_ticket=%s
+   3). post 请求
+   4). post data
+       {
+          'BaseResponse': {
+              'Uin': wxuin,
+              'Sid': wxsid,
+              'Skey': skey,
+              'DeviceID': //随机串 'e'+str(random.random())[2:17]
+          }
+          'ClientMsgId': 13位时间戳,
+          'Code': 3  //固定值
+          'FromUserName':  userNmae, //从初始化登录信息那边取到
+          'ToUserName': userNmae, //从初始化登录信息那边取到
+       }
+   5). 返回json串，BaseResponse内Ret位0表示成功
+   
 ```
 
 ## 参考
