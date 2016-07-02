@@ -117,7 +117,13 @@
        c. 7 手机操作了微信
        
 8. 获取消息
-   1). 说明: 
+   1). 说明: 根据同步刷新的接口拿到当前的状态后，如果是新的消息，需要获取新的消息
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=%s&skey=%s&pass_ticket=%s
+   3). 返回json串
+       a. BaseResponse，Ret位0表示返回成功
+       b. AddMsgCount 表示新消息个数
+       c. AddMsgList 表示新消息列表
+          a. MsgType -> 51表示系统原始消息
 
 9. 发送消息
    
