@@ -96,17 +96,21 @@
    
 7. 同步刷新
    1). 说明: 为了保证客户端和服务端通信正常，需要客户端不断发送请求给服务端
-   2). api: https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&synckey=%s&_=%s
+   2). api: https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&sid=%s&uin=%s&deviceid=%s&synckey=%s&_=%s
    3). get 请求
    4). 参数说明
        a. r --> 13位时间戳
-       b. skey 同上
-       c. syncke由 初始化登录页面信息返回串中Sync的list列表组成
+       b. skey 同上,需要url quote
+       c. sid 同上
+       d. devicedid 同上
+       e. synckey由 初始化登录页面信息返回串中Sync的list列表组成, 需要url quote
+       f. _ 13位时间戳
    5). 返回值
        window.synccheck={retcode:"xxx",selector:"xxx"}
        retcode:
        a. 0 正常
        b. 1100 失败/登出微信
+       c. 1101 从其它设备登录微信网页版
        selector:
        a. 0 正常
        b. 2 新的消息
