@@ -94,6 +94,24 @@
        }
    5). 返回json串，BaseResponse内Ret位0表示成功
    
+7. 同步刷新
+   1). 说明: 为了保证客户端和服务端通信正常，需要客户端不断发送请求给服务端
+   2). api: https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&synckey=%s&_=%s
+   3). get 请求
+   4). 参数说明
+       a. r --> 13位时间戳
+       b. skey 同上
+       c. syncke由 初始化登录页面信息返回串中Sync的list列表组成
+   5). 返回值
+       window.synccheck={retcode:"xxx",selector:"xxx"}
+       retcode:
+       a. 0 正常
+       b. 1100 失败/登出微信
+       selector:
+       a. 0 正常
+       b. 2 新的消息
+       c. 7 进入/离开聊天界面
+   
 ```
 
 ## 参考
