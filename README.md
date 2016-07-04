@@ -123,10 +123,46 @@
        a. BaseResponse，Ret位0表示返回成功
        b. AddMsgCount 表示新消息个数
        c. AddMsgList 表示新消息列表
-          a. MsgType -> 51表示系统原始消息
+          MsgType 	说明
+          1 	文本消息
+          3 	图片消息
+          34 	语音消息
+          37 	VERIFYMSG
+          40 	POSSIBLEFRIEND_MSG
+          42 	共享名片
+          43 	视频通话消息
+          47 	动画表情
+          48 	位置消息
+          49 	分享链接
+          50 	VOIPMSG
+          51 	微信初始化消息
+          52 	VOIPNOTIFY
+          53 	VOIPINVITE
+          62 	小视频
+          9999 	SYSNOTICE
+          10000 	系统消息
+          10002 	撤回消息
 
 9. 发送消息
-   
+   1). 说明: 发送数据给指定用户,包括群聊等
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg
+   3). post 请求
+   4). post data
+       {
+          'BaseResponse': {
+              'Uin': wxuin,
+              'Sid': wxsid,
+              'Skey': skey,
+              'DeviceID': //随机串 'e'+str(random.random())[2:17]
+          }
+          'Type': //消息类型，同上
+          'Content': //消息内容
+          'FromUserName':  //发送用户
+          'ToUserName': //接受用户
+          'LocalID':  //13位时间戳+4位随机数
+          'ClientMsgId': //同LocalId
+       }
+   5). 返回json串，BaseResponse内Ret位0表示成功
 ```
 
 ## 参考
@@ -134,4 +170,5 @@
 1. https://github.com/xiangzhai/qwx/blob/master/doc/protocol.md
 2. https://github.com/Urinx/WeixinBot
 3. https://github.com/liuwons/wxBot
+4. http://www.tanhao.me/talk/1466.html/
 ```
