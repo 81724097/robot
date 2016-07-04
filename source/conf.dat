@@ -7,4 +7,8 @@ status_notify_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxstatusnotify?lang
 get_all_contact_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxgetcontact?lang=zh_CN&pass_ticket=%s&r=%s&seq=0&skey=%s
 sync_check_url = https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&sid=%s&uin=%s&deviceid=%s&synckey=%s&_=%s
 msg_sync_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsync?sid=%s&skey=%s&pass_ticket=%s
-send_message_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg?pass_ticket=%s
+send_message_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg
+
+[tuling]
+open_api = http://www.tuling123.com/openapi/api
+api_key = xxxx
