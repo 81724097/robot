@@ -6,6 +6,7 @@
 1. linux: 
    1). ubuntu 12.04
    2). sudo apt-get install imagemagick
+       sudo apt-get install python-pip
 2 python:
    1). version > 2.6
    2). pip install requests
