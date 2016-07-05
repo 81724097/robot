@@ -30,7 +30,7 @@ WeiXinReBot功能类
 """
 class WeiXinReBot(object):
     def __init__(self):
-        self.config_dict = config_parser.ReadConfig('./conf.dat')
+        self.config_dict = config_parser.ReadConfig('../conf/conf.dat')
         self.session = safe_session.SafeSession()
         self.session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:47.0) Gecko/20100101 Firefox/47.0'})
         self.uuid = self.__init_uuid__()
@@ -190,6 +190,7 @@ class WeiXinReBot(object):
         self.sync_key_dict = json_dict['SyncKey']
         self.user_info_dict = json_dict['User']
         self.my_user_name = self.user_info_dict['UserName']
+        self.my_nick_name = self.user_info_dict['NickName']
         self.sync_key = ""
         for keyVal in self.sync_key_dict['List']:
             self.sync_key = self.sync_key + '|' + str(keyVal['Key']) + '_' + str(keyVal['Val'])
@@ -239,26 +240,6 @@ class WeiXinReBot(object):
             logging.error("status notify request return non 0 status")
             return False
         logging.info("Success status notify")
-        return True
-
-    def __get_all_contact__(self):
-        logging.info("Start to get all contact ...")
-        get_all_contact_url = self.config_dict['login']['get_all_contact_url']
-        get_all_contact_url = get_all_contact_url % (self.pass_ticket, str(int(round(time.time()*1000))), self.skey)
-        response = self.session.get(get_all_contact_url)
-        if response is None or response.content == "":
-            logging.error("get all contact request return None response")
-            return False
-        json_dict = json.loads(response.content)
-        if 'BaseResponse' not in json_dict or 'Ret' not in json_dict['BaseResponse'] or \
-            json_dict['BaseResponse']['Ret'] != 0:
-            logging.error("get all contact request return non 0 status")
-            return False
-        if 'MemberList' not in json_dict:
-            logging.error("get empty member list")
-            return False
-        self.__contact_classify__(json_dict['MemberList'])
-        logging.info("Success get all contact")
         return True
 
     def __contact_classify__(self, member_list):
@@ -368,6 +349,9 @@ class WeiXinReBot(object):
         # filter seng by myself message
         if msg_dict['FromUserName'] == self.my_user_name:
             return True
+        # filter gong zong hao message
+        if msg_dict['AppMsgType'] != 0:
+            return True
         return False
 
     def __process_message__(self, msg_list):
@@ -377,19 +361,34 @@ class WeiXinReBot(object):
         for msg in msg_list:
             if self.__filter_message__(msg):
                 continue
+            print msg
+            # message from group
+            receive_content = msg['Content'].encode('utf-8')
+            if msg['FromUserName'].startswith('@@') and receive_content.find(self.my_nick_name) < 0:
+                random_num = int(random.random() * 100)
+                if random_num != 99:
+                    return
+            # picture message
+            if msg['MsgType'] != 1:
+                random_num = int(random.random() * 5)
+                if random_num != 3:
+                    return
+                send_message = str("【呆萌小白】画个圈圈诅咒你^-^").decode('utf-8')
+            else:
+                tuling_content = self.tuling_api(receive_content)
+                if tuling_content is None or tuling_content == "":
+                    tuling_content = str("抱歉, 不明白你说的是什么意思~").decode('utf-8')
+                send_message = str("【呆萌小白】").decode('utf-8') + tuling_content
             send_message_url = self.config_dict['login']['send_message_url']
             msg_id = str(int(time.time() * 1000)) + str(random.random())[-4:]
-            receive_content = msg['Content'].encode('utf-8')
-            tuling_content = self.tuling_api(receive_content)
-            if tuling_content is None or tuling_content == "":
-                tuling_content = str("抱歉,我没有明白你的意思~").decode('utf-8')
+            # picture message
             json_dict = {
                 'BaseRequest': self.base_request_dict,
                 'Msg': {
                     "Type": 1,
-                    "Content": tuling_content,
+                    "Content": send_message,
                     "FromUserName": self.my_user_name,
-                    "ToUserName": xxx
+                    "ToUserName": msg['ToUserName'],
                     "LocalID": msg_id,
                     "ClientMsgId": msg_id
                 },
@@ -399,7 +398,7 @@ class WeiXinReBot(object):
             data = json.dumps(json_dict, ensure_ascii=False).encode('utf-8')
             self.session.post(send_message_url, data=data, headers=headers)
 
-    def instant_message(self):
+    def __run__(self):
         logging.info("Start receive and send message ...")
         while True:
             try:
@@ -410,11 +409,13 @@ class WeiXinReBot(object):
                 if retcode == '0':
                     if selector == '2':
                         msg_list = self.__msg_sync__()
+                        # wait 10s
+                        # check user has click in phone
+                        time.sleep(10)
+                        retcode, selector = self.__sync_check__()
+                        if retcode == '0' and selector == '7':
+                            continue
                         self.__process_message__(msg_list)
-                    elif selector == '7':
-                        pass
-                    else:
-                        pass
                 elif retcode == '1100':
                     logging.info("check fail or log out wechat")
                     return
@@ -424,7 +425,8 @@ class WeiXinReBot(object):
             except Exception, e:
                 logging.error("receive and send message exception:[%s]" % str(e))
                 sys.exit(2)
-            time.sleep(0.2)
+            # wait 1s
+            time.sleep(1)
 
     def run(self):
         logging.info("Start run weixin rebot ...")
@@ -443,8 +445,9 @@ class WeiXinReBot(object):
         if self.__status_notify__() is False:
             logging.error("Fail to status notify")
             sys.exit(2)
-        if self.__get_all_contact__() is False:
-            logging.error("Fail to get all contact")
-            sys.exit(2)
-        self.instant_message()
+        self.__run__()
         logging.info("Success run weixin rebot")
+
+if __name__ == "__main__":
+    rebot = WeiXinReBot()
+    rebot.run()
