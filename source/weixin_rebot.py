@@ -352,6 +352,10 @@ class WeiXinReBot(object):
         # filter init message
         if msg_dict['MsgType'] == 51:
             return True
+        # filter myself send message and ToUserName != my user name
+        if msg_dict['FromUserName'] == self.my_user_name and \
+                msg_dict['ToUserName'] != self.my_user_name:
+            return True
         # filter gong zong hao message
         if msg_dict['AppMsgType'] != 0:
             return True
