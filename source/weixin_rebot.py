@@ -343,6 +343,16 @@ class WeiXinReBot(object):
         return json_dict['text']
 
     def __filter_message__(self, msg_dict):
+        # special account
+        if msg_dict['FromUserName'] == self.my_user_name and \
+            msg_dict['ToUserName'] == self.my_user_name:
+            return False
+        # wait 10s
+        # check user has click in phone
+        time.sleep(10)
+        retcode, selector = self.__sync_check__()
+        if retcode == '0' and selector == '7':
+            return True
         # filter init message
         if msg_dict['MsgType'] == 51:
             return True
@@ -388,7 +398,7 @@ class WeiXinReBot(object):
                     "Type": 1,
                     "Content": send_message,
                     "FromUserName": self.my_user_name,
-                    "ToUserName": msg['ToUserName'],
+                    "ToUserName": msg['FromUserName'],
                     "LocalID": msg_id,
                     "ClientMsgId": msg_id
                 },
@@ -409,12 +419,6 @@ class WeiXinReBot(object):
                 if retcode == '0':
                     if selector == '2':
                         msg_list = self.__msg_sync__()
-                        # wait 10s
-                        # check user has click in phone
-                        time.sleep(10)
-                        retcode, selector = self.__sync_check__()
-                        if retcode == '0' and selector == '7':
-                            continue
                         self.__process_message__(msg_list)
                 elif retcode == '1100':
                     logging.info("check fail or log out wechat")
