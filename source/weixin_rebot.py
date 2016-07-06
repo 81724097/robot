@@ -343,12 +343,6 @@ class WeiXinReBot(object):
         return json_dict['text']
 
     def __filter_message__(self, msg_dict):
-        # wait 10s
-        # check user has click in phone
-        time.sleep(10)
-        retcode, selector = self.__sync_check__()
-        if retcode == '0' and selector == '7':
-            return True
         # filter init message
         if msg_dict['MsgType'] == 51:
             return True
@@ -358,6 +352,12 @@ class WeiXinReBot(object):
             return True
         # filter gong zong hao message
         if msg_dict['AppMsgType'] != 0:
+            return True
+        # wait 10s
+        # check user has click in phone
+        time.sleep(10)
+        retcode, selector = self.__sync_check__()
+        if retcode == '0' and selector == '7':
             return True
         return False
 
@@ -381,6 +381,7 @@ class WeiXinReBot(object):
             # message from group
             receive_content = msg['Content'].encode('utf-8')
             if msg['FromUserName'].startswith('@@') and receive_content.find(self.my_nick_name) < 0:
+                logging.info("来自群聊消息:%s" % receive_content)
                 random_num = int(random.random() * 10)
                 if random_num != 8:
                     return
@@ -391,6 +392,7 @@ class WeiXinReBot(object):
                     return
                 send_message = str("【呆萌小白】画个圈圈诅咒你^-^").decode('utf-8')
             else:
+                logging.info("来自朋友消息:%s" % receive_content)
                 tuling_content = self.tuling_api(receive_content)
                 if tuling_content is None or tuling_content == "":
                     tuling_content = str("抱歉, 不明白你说的是什么意思~").decode('utf-8')
@@ -438,8 +440,9 @@ class WeiXinReBot(object):
                 sys.exit(2)
             # wait 1s
             time.sleep(1)
-            if counter % 1000 == 0:
-                logging.info("running receive and send message ...")
+            if counter % 300 == 0:
+                logging.info("Running receive and send message ...")
+            counter += 1
 
     def run(self):
         logging.info("Start run weixin rebot ...")
