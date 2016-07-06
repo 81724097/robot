@@ -377,13 +377,13 @@ class WeiXinReBot(object):
             # message from group
             receive_content = msg['Content'].encode('utf-8')
             if msg['FromUserName'].startswith('@@') and receive_content.find(self.my_nick_name) < 0:
-                random_num = int(random.random() * 100)
-                if random_num != 99:
+                random_num = int(random.random() * 10)
+                if random_num != 8:
                     return
             # no text message
             if msg['MsgType'] != 1:
-                random_num = int(random.random() * 5)
-                if random_num != 3:
+                random_num = int(random.random() * 4)
+                if random_num != 2:
                     return
                 send_message = str("【呆萌小白】画个圈圈诅咒你^-^").decode('utf-8')
             else:
