@@ -431,11 +431,19 @@ class WeiXinReBot(object):
                     logging.error("sync check return empty result, process exit" % str(e))
                     sys.exit(2)
                 if retcode == '0':
+                    # receive message
                     if selector == '2':
                         msg_list = self.__msg_sync__()
                         self.__process_message__(msg_list)
+                    # user click phone
                     elif selector == '7':
                         self.user_last_click_phone_time = int(time.time())
+                    # no event
+                    elif selector == '0':
+                        continue
+                    else:
+                        msg_list = self.__msg_sync__()
+                        continue
                 elif retcode == '1100':
                     logging.info("check fail or log out wechat")
                     return
