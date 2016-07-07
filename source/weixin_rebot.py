@@ -353,15 +353,6 @@ class WeiXinReBot(object):
         # filter gong zong hao message
         if msg_dict['AppMsgType'] != 0:
             return True
-        # most wait 10s
-        # check user has click in phone
-        counter = 0
-        while counter < 10:
-            retcode, selector = self.__sync_check__()
-            if retcode == '0' and selector == '7':
-                return True
-            time.sleep(1)
-            counter += 1
         return False
 
     def __judge_myself_normal_message__(self, msg_dict):
@@ -372,11 +363,25 @@ class WeiXinReBot(object):
             return True
         return False
 
+    def __check_user_click_phone__(self, msg_dict):
+        # most wait 10s
+        # check user has click in phone
+        counter = 0
+        while counter < 50:
+            retcode, selector = self.__sync_check__()
+            if retcode == '0' and selector == '7':
+                return True
+            time.sleep(0.2)
+            counter += 1
+        return False
+
     def __process_message__(self, msg_list):
         '''
         {u'ImgWidth': 0, u'FromUserName': u'@7307dc09aa000b0cee33040a55545b1e', u'PlayLength': 0, u'RecommendInfo': {u'UserName': u'', u'Province': u'', u'City': u'', u'Scene': 0, u'QQNum': 0, u'Content': u'', u'Alias': u'', u'OpCode': 0, u'Signature': u'', u'Ticket': u'', u'Sex': 0, u'NickName': u'', u'AttrStatus': 0, u'VerifyFlag': 0}, u'Content': u'\u5feb\u4e86', u'StatusNotifyUserName': u'', u'StatusNotifyCode': 0, u'NewMsgId': 2227133994448124545L, u'Status': 3, u'VoiceLength': 0, u'ToUserName':u'@@b2b6d750196df1363b08610d6b4f0e6458585333f857250af2f0b5bd688d2e5c', u'ForwardFlag': 0, u'AppMsgType': 0, u'Ticket': u'', u'AppInfo': {u'Type': 0, u'AppID': u''}, u'Url': u'', u'ImgStatus': 1, u'MsgType': 1, u'ImgHeight': 0, u'MediaId': u'', u'MsgId': u'2227133994448124545', u'FileName': u'', u'HasProductId': 0, u'FileSize': u'', u'CreateTime': 1467645656, u'SubMsgType': 0}
         '''
         for msg in msg_list:
+            if self.__check_user_click_phone__(msg):
+                return
             if self.__judge_myself_normal_message__(msg) is False and \
                     self.__filter_message__(msg):
                 continue
