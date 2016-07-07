@@ -353,12 +353,15 @@ class WeiXinReBot(object):
         # filter gong zong hao message
         if msg_dict['AppMsgType'] != 0:
             return True
-        # wait 10s
+        # most wait 10s
         # check user has click in phone
-        time.sleep(10)
-        retcode, selector = self.__sync_check__()
-        if retcode == '0' and selector == '7':
-            return True
+        counter = 0
+        while counter < 10:
+            retcode, selector = self.__sync_check__()
+            if retcode == '0' and selector == '7':
+                return True
+            time.sleep(1)
+            counter += 1
         return False
 
     def __judge_myself_normal_message__(self, msg_dict):
