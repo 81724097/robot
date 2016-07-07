@@ -36,6 +36,7 @@ class WeiXinReBot(object):
         self.uuid = self.__init_uuid__()
         self.tuling_open_api = self.config_dict['tuling']['open_api']
         self.tuling_api_key = self.config_dict['tuling']['api_key']
+        self.user_last_click_phone_time = 0
 
     def __init_uuid__(self):
         '''
@@ -364,16 +365,11 @@ class WeiXinReBot(object):
         return False
 
     def __check_user_click_phone__(self, msg_dict):
-        # most wait 10s
-        # check user has click in phone
-        counter = 0
-        while counter < 50:
-            retcode, selector = self.__sync_check__()
-            if retcode == '0' and selector == '7':
-                return True
-            time.sleep(0.2)
-            counter += 1
-        return False
+        # judge user last click phone 5 minutes ago
+        current_time = int(time.time())
+        if current_time-self.user_last_click_phone_time > 5*60:
+            return False
+        return True
 
     def __process_message__(self, msg_list):
         '''
@@ -437,6 +433,8 @@ class WeiXinReBot(object):
                     if selector == '2':
                         msg_list = self.__msg_sync__()
                         self.__process_message__(msg_list)
+                    elif selector == '7':
+                        self.user_last_click_phone_time = int(time.time())
                 elif retcode == '1100':
                     logging.info("check fail or log out wechat")
                     return
