@@ -365,9 +365,9 @@ class WeiXinReBot(object):
         return False
 
     def __check_user_click_phone__(self, msg_dict):
-        # judge user last click phone 5 minutes ago
+        # judge user last click phone 2 minutes ago
         current_time = int(time.time())
-        if current_time-self.user_last_click_phone_time > 5*60:
+        if current_time-self.user_last_click_phone_time > 2*60:
             return False
         return True
 
@@ -376,10 +376,10 @@ class WeiXinReBot(object):
         {u'ImgWidth': 0, u'FromUserName': u'@7307dc09aa000b0cee33040a55545b1e', u'PlayLength': 0, u'RecommendInfo': {u'UserName': u'', u'Province': u'', u'City': u'', u'Scene': 0, u'QQNum': 0, u'Content': u'', u'Alias': u'', u'OpCode': 0, u'Signature': u'', u'Ticket': u'', u'Sex': 0, u'NickName': u'', u'AttrStatus': 0, u'VerifyFlag': 0}, u'Content': u'\u5feb\u4e86', u'StatusNotifyUserName': u'', u'StatusNotifyCode': 0, u'NewMsgId': 2227133994448124545L, u'Status': 3, u'VoiceLength': 0, u'ToUserName':u'@@b2b6d750196df1363b08610d6b4f0e6458585333f857250af2f0b5bd688d2e5c', u'ForwardFlag': 0, u'AppMsgType': 0, u'Ticket': u'', u'AppInfo': {u'Type': 0, u'AppID': u''}, u'Url': u'', u'ImgStatus': 1, u'MsgType': 1, u'ImgHeight': 0, u'MediaId': u'', u'MsgId': u'2227133994448124545', u'FileName': u'', u'HasProductId': 0, u'FileSize': u'', u'CreateTime': 1467645656, u'SubMsgType': 0}
         '''
         for msg in msg_list:
-            if self.__check_user_click_phone__(msg):
-                return
             if self.__judge_myself_normal_message__(msg) is False and \
-                    self.__filter_message__(msg):
+                    self.__check_user_click_phone__(msg):
+                return
+            if self.__filter_message__(msg):
                 continue
             print msg
             # message from group
@@ -426,6 +426,7 @@ class WeiXinReBot(object):
         while True:
             try:
                 retcode, selector = self.__sync_check__()
+                logging.info("sync check retcode:[%s], selector:[%s]" % (retcode, selector))
                 if retcode == '' or selector == '':
                     logging.error("sync check return empty result, process exit" % str(e))
                     sys.exit(2)
