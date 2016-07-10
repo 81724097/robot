@@ -243,21 +243,6 @@ class WeiXinReBot(object):
         logging.info("Success status notify")
         return True
 
-    def __contact_classify__(self, member_list):
-        logging.info("Start to classify contact ...")
-        self.contact_account = {}
-        # 朋友和群聊
-        self.contact_account['normal_account'] = {}
-        # 其它,包括公众号
-        self.contact_account['public_account'] = {}
-        for contact_dict in member_list:
-            nick_name = contact_dict['NickName']
-            if contact_dict['VerifyFlag'] == 0:
-                self.contact_account['normal_account'][nick_name] = contact_dict
-            else:
-                self.contact_account['public_account'][nick_name] = contact_dict
-        logging.info("Success classify contact")
-
     def __sync_check__(self):
         '''
         1. api: https://webpush.wx.qq.com/cgi-bin/mmwebwx-bin/synccheck?r=%s&skey=%s&synckey=%s&_=%s

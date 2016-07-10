@@ -11,4 +11,4 @@ send_message_url = https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxsendmsg
 
 [tuling]
 open_api = http://www.tuling123.com/openapi/api
-api_key = xxxx
+api_key = d2386ca3badb8dbffd7d6db573d7b9f5
