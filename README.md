@@ -10,11 +10,11 @@
    + 如果消息来自一般用户，消息类型是图片则随机回复，消息类型是文本则调用图灵机器人接口获取智能回答然后发送消息
    + 如果消息来自公众号，直接过滤
 
-## 使用
+## 2. 使用说明
 1. python weixin_rebot.py
 2. 扫描二维码登录即可
 
-## 依赖
+## 3. 环境依赖
 ```
 1. linux: 
    1). ubuntu 12.04
@@ -30,7 +30,7 @@
        python setup.py install
 ```
 
-## web微信登录过程
+## 4. web微信登录过程
 ```
 1. 获取uuid
    1). 说明: 微信Web版本不使用用户名和密码登录，而是采用二维码登录，所以服务器需要首先分配一个唯一的会话ID，用来标识当前的一次登录
@@ -181,10 +181,8 @@
    5). 返回json串，BaseResponse内Ret位0表示成功
 ```
 
-## 参考
-```
+## 5. 参考
 1. https://github.com/xiangzhai/qwx/blob/master/doc/protocol.md
 2. https://github.com/Urinx/WeixinBot
 3. https://github.com/liuwons/wxBot
 4. http://www.tanhao.me/talk/1466.html/
-```
