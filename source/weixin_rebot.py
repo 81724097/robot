@@ -90,7 +90,7 @@ class WeiXinReBot(object):
         '''
         logging.info("Wait user confirm login ...")
         base_qrcode_url = self.config_dict['login']['scan_qrcode_url']
-        scan_qrcode_url = base_qrcode_url % ("0", self.uuid, str(int(round(time.time() * 1000))))
+        scan_qrcode_url = base_qrcode_url % ("0", str(random.random())[2:11], self.uuid, str(int(round(time.time() * 1000))))
         time_count = 0
         while True:
             response = self.session.get(scan_qrcode_url)
