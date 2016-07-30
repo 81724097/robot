@@ -52,14 +52,13 @@
 
 3. 扫描二维码等待用户确认
    1). 说明: 当用户拿到二维码数据之后，用户需要扫描二维码并点击确认登录
-   2). api: https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?uuid=%s&tip=1&_=%s
+   2). api: https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?loginicon=true&uuid=%s&tip=0&r=-979422099&_=%s
    3). get 请求
    4). 参数说明
        a. uuid 表示当前uuid
-       b. tip
-          1->表示的是未扫描，等待用户扫描。返回window.code=201表示扫描成功，返回window.code=408表示扫描超时
-          0->表示等待用户确认登录。返回window.code=200;window.redirect_uri="https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=IZu2xb_hIQ==&lang=zh_CN&scan=1467393709"; 表示登录成功
-       c. _表示当前时间戳，13位
+       b. tip: 0->表示等待用户确认登录。返回window.code=200;window.redirect_uri="https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?ticket=AWskQEu2O8VUs7Wf2TVOH8UW@qrticket_0&uuid=IZu2xb_hIQ==&lang=zh_CN&scan=1467393709"; 表示登录成功
+       c. r: -979422099 随机9位字符串即可
+       d. _表示当前时间戳，13位
    5). 点击登录成功之后，返回redirect_uri表示用户已经在手机端完成了授权过程，需要继续访问当前链接获取wxuin和wxsid
 
 4. 访问登录地址，获得uin和sid
@@ -78,7 +77,7 @@
 
 5. 初始化登录页信息
    1). 说明: 初始化登录后页面的信息，获取常用联系人以及微信公众号
-   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=%s&lang=zh_CN&pass_ticket=%s
+   2). api: https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxinit?r=-%s&lang=zh_CN&pass_ticket=%s
    3). post 请求
    4). post data
        {
