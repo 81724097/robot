@@ -25,9 +25,6 @@
    2). sudo pip install requests
    3). sudo pip install pypng
    4). sudo pip install Pillow
-   5). sudo pip install pyqrcode
-       cd pyqrcode
-       python setup.py install
 ```
 
 ## 4. web微信登录过程
