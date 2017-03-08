@@ -11,7 +11,6 @@ import json
 import random
 import urllib2
 import logging
-import pyqrcode
 import webbrowser
 import config_parser
 import safe_session
